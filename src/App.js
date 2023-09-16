@@ -3,7 +3,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import fetchRssFeed from "./api_handler/api_handler";
+import apiHandler from "./api_handler/api_handler";
 import JobsTable from "./components/JobsTable";
 
 import GoogleMapComponent from "./components/MapComponent";
@@ -12,17 +12,19 @@ function App() {
   const [feedItems, setFeedItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [countriesList, setCountriesList] = useState({});
-
   useEffect(() => {
-    setLoading(true);
     const fetch = async () => {
       setLoading(true);
 
-      await fetchRssFeed().then((result) => {
-        setFeedItems(result[0]);
-        setCountriesList(result[1]);
+      try {
+        const result = await apiHandler.fetchRssFeed();
+        setFeedItems(result.rssItems);
+        setCountriesList(result.countriesMap);
+      } catch (error) {
+        console.error("Error fetching RSS feed:", error);
+      } finally {
         setLoading(false);
-      });
+      }
     };
 
     fetch();
@@ -53,11 +55,10 @@ function App() {
           <Route
             path="/map"
             element={
-              <GoogleMapComponent jobData={countriesList}></GoogleMapComponent>
+              <GoogleMapComponent countriesList={countriesList} ></GoogleMapComponent>
             }
           >
           </Route>
-          {/* <Route path='*' element={<ProfilePage></ProfilePage>}> </Route> */}
         </Routes>
       </Router>
     </div>

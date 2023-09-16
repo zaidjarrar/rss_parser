@@ -2,63 +2,7 @@
   text-align: center;
   
 }
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 5px;
-  
-}
-th, td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-th {
-  background-color: #f2f2f2;
-  font-weight: 400;
-}
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-tr:hover {
-  background-color: #e0e0e0;
-}
 
-.title-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.title-list li {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  margin-bottom: 10px;
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background-color 0.3s ease-in-out;
-}
-.title-list li:hover {
-  background-color: #f2f2f2;
-}
-.title-list li .title {
-  font-size: 18px;
-  font-weight: 400;
-}
-.title-list li .actions {
-  display: flex;
-  gap: 10px;
-}
-.title-list li .actions a {
-  text-decoration: none;
-  color: #007bff;
-}
-.title-list li .actions a:hover {
-  text-decoration: underline;
-}
 
 
 /* Navigation List Styles */

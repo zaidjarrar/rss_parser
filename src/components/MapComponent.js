@@ -1,10 +1,11 @@
 import { React, useState, useEffect } from "react";
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner";
+import apiHandler from "../api_handler/api_handler";
+import '../styles/map_styles.css'
+export default function GoogleMapComponent({ countriesList }) {
+    const markerIconUrl = "https://cdn-icons-png.flaticon.com/512/15/15918.png?ga=GA1.1.827467152.1681676869";
 
-
-export default function GoogleMapComponent({ jobData }) {
     const mapStyles = {
         height: "400px",
         width: "100%",
@@ -23,37 +24,20 @@ export default function GoogleMapComponent({ jobData }) {
         const fetchCoordinates = async () => {
             setLoadingLocation(true);
             const countryMarkers = [];
-            const entries = Object.entries(jobData);
-            for (const [job] of entries) {
-                try {
-                    const response = await axios.get(
-                        `http://localhost:4050/address/${job}`
-                    );
-                    if (response.data.status === "OK") {
-                        const location = response.data.results[0].geometry.location;
-                        countryMarkers.push({
-                            lat: location.lat,
-                            lng: location.lng,
-                            title: job,
-                        });
-                    }
-                } catch (error) {
-                    console.error(
-                        `Error fetching coordinates for ${job.country}:`,
-                        error
-                    );
-                }
+            const countriesEntries = Object.entries(countriesList);
+            for (const [country] of countriesEntries) {
+                const locData = await apiHandler.fetchCountryAddress(country);
+                countryMarkers.push(locData);
             }
             setMarkers(countryMarkers);
             setLoadingLocation(false);
         };
         fetchCoordinates();
-    }, [jobData]);
+    }, [countriesList]);
 
-    //  scale the size based on number of jobs every country has
-    const iconSizeMultiplier = (length) => {
-        return (length > 75 ? length : 75) / 75;
-    };
+    //  scale the size based on number of jobs every country has , if less than 75 jobs are listed default to 75
+    const iconSizeMultiplier = (length) => Math.max(length, 75) / 75;
+
 
     if (loadingLocation) {
         return (
@@ -64,25 +48,30 @@ export default function GoogleMapComponent({ jobData }) {
     return (
         <>
             <GoogleMap mapContainerStyle={mapStyles} zoom={4} center={defaultCenter}>
-                {!loadingLocation &&
-                    markers.map((marker, index) => (
-                        <Marker
-                            key={index}
-                            position={{ lat: marker.lat, lng: marker.lng }}
-                            title={marker.title}
-                            onClick={(e) => {
-                                setAvailableJobsInLocation(jobData[marker.title]);
-                                setSelectedCountry(marker.title);
-                            }}
-                            icon={{
-                                url: "https://cdn-icons-png.flaticon.com/512/15/15918.png?ga=GA1.1.827467152.1681676869",
-                                scaledSize: new window.google.maps.Size(
-                                    20 * iconSizeMultiplier(jobData[marker.title].length),
-                                    20 * iconSizeMultiplier(jobData[marker.title].length)
-                                ), // Adjust the size based on number of jobs
-                            }}
-                        />
-                    ))}
+                {
+                    markers.map((marker, index) => {
+                        var jobsList = countriesList[marker.title];
+                        return (
+
+                            <Marker
+                                key={index}
+                                position={{ lat: marker.lat, lng: marker.lng }}
+                                title={marker.title}
+                                onClick={() => {
+                                    setAvailableJobsInLocation(jobsList);
+                                    setSelectedCountry(marker.title);
+                                }}
+                                icon={{
+                                    url: markerIconUrl,
+                                    scaledSize: new window.google.maps.Size(
+                                        20 * iconSizeMultiplier(jobsList.length),
+                                        20 * iconSizeMultiplier(jobsList.length)
+                                    ), // Adjust the size based on number of jobs
+                                }}
+                            />
+
+                        )
+                    })}
             </GoogleMap>
 
             {selectedCountry ? (
@@ -104,7 +93,7 @@ export default function GoogleMapComponent({ jobData }) {
                     </ul>
                 </div>
             ) : (
-                <p>select a country from the map to show the jobs</p>
+                <p>select a country marker from the map to show the jobs</p>
             )}
         </>
     );

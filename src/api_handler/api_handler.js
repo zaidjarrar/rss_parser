@@ -1,39 +1,69 @@
 import axios from 'axios';
+const RSS_FEED_URL = 'http://localhost:4050/feed';
+const COUNTIES_ADDRESS_URL = 'http://localhost:4050/address/';
+
 const fetchRssFeed = async () => {
     try {
+        const response = await axios.get(RSS_FEED_URL);
+        const xmlText = await response.data;
 
-
-        const response = await axios.get(
-            // 'https://www.rotanacareers.com/rss/all/'
-            'http://localhost:4050/feed'
-        );
-
-        const text = await response.data;
         const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(text, 'text/xml');
+        const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
         const items = xmlDoc.querySelectorAll('item');
         const countriesMap = {};
-        const parsedItems = Array.from(items).map((item) => {
-            if (!countriesMap[item.querySelector('country').textContent]) {
-                countriesMap[item.querySelector('country').textContent] = [];
+
+        const processItem = (item) => {
+            const countryElement = item.querySelector('country');
+            const titleElement = item.querySelector('title');
+
+
+            if (!countriesMap[countryElement.textContent]) {
+                countriesMap[countryElement.textContent] = [];
             }
 
-            countriesMap[item.querySelector('country').textContent].push(
-                `${item.querySelector('title').textContent}`
-            );
+            countriesMap[countryElement.textContent].push(titleElement.textContent);
 
-            return ({
-                title: item.querySelector('title').textContent,
-                link: item.querySelector('link').textContent,
-                description: item.querySelector('description').textContent,
-                country: item.querySelector('country').textContent,
-            })
-        });
-        return [parsedItems, countriesMap];
+            return {
+                title: titleElement.textContent,
+                country: countryElement.textContent,
+            };
+        };
+        const rssItems = Array.from(items).map(processItem);
 
+
+
+        return { rssItems, countriesMap };
     } catch (error) {
         console.error('Error fetching or parsing RSS feed:', error);
+        throw error;
     }
 };
 
-export default fetchRssFeed;
+
+
+const fetchCountryAddress = async (
+    country
+) => {
+    try {
+        const response = await axios.get(
+            `${COUNTIES_ADDRESS_URL}${country}`
+        );
+        if (response.data.status === "OK") {
+
+            const location = response.data.results[0].geometry.location;
+            const locationData = {
+                lat: location.lat,
+                lng: location.lng,
+                title: country,
+            }
+            return locationData;
+        }
+    } catch (error) {
+        console.error(
+            `Error fetching coordinates for ${country} : `,
+            error
+        );
+    }
+}
+
+export default { fetchRssFeed, fetchCountryAddress };

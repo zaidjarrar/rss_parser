@@ -1,0 +1,22 @@
+.jobs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 5px;
+    
+  }
+  .jobs-table th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  .jobs-table th {
+    background-color: #f2f2f2;
+    font-weight: 400;
+  }
+  .jobs-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  .jobs-table tr:hover {
+    background-color: #e0e0e0;
+  }
+  

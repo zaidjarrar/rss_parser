@@ -2,16 +2,19 @@
 
 
 # To run the project 
-`npm install`
-`npm run start`
+
+# `npm install`
+# `npm run start`
 
 
 
 please remember to add the .env file 
 
-`
+```
 GOOGLE_MAP_API_KEY=<THE API KEY>
 PORT=4050
 REACT_APP_GOOGLE_MAP_API_KEY=${GOOGLE_MAP_API_KEY}
 
-`
+```
+
+
