@@ -12,7 +12,7 @@ please remember to add the .env file
 
 ```
 GOOGLE_MAP_API_KEY=<THE API KEY>
-PORT=4050
+SERVER_PORT=4050
 REACT_APP_GOOGLE_MAP_API_KEY=${GOOGLE_MAP_API_KEY}
 
 ```
