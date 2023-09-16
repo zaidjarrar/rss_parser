@@ -1,38 +1,101 @@
 .App {
   text-align: center;
+  
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+  
+}
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+th {
+  background-color: #f2f2f2;
+  font-weight: 400;
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+tr:hover {
+  background-color: #e0e0e0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.title-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.title-list li {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 10px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  transition: background-color 0.3s ease-in-out;
+}
+.title-list li:hover {
+  background-color: #f2f2f2;
+}
+.title-list li .title {
+  font-size: 18px;
+  font-weight: 400;
+}
+.title-list li .actions {
+  display: flex;
+  gap: 10px;
+}
+.title-list li .actions a {
+  text-decoration: none;
+  color: #007bff;
+}
+.title-list li .actions a:hover {
+  text-decoration: underline;
 }
 
-.App-link {
-  color: #61dafb;
+
+/* Navigation List Styles */
+.nav-container{
+  background-color: #e0e0e0;
+  padding:1rem;
+}
+.nav-list {
+  list-style: none;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.nav-item {
+  margin: 0 20px; /* Adjust the spacing as needed */
+  font-size: 24px;
+  font-weight: 300;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-item:hover {
+  color: #FFF; /* Change to your desired hover color */
+}
+
+
+a{
+  text-decoration: none; 
+  color: inherit; 
+  cursor: pointer; 
+}
+
+
+p{
+  font-size: 24px;
+  font-weight: 300;
 }
