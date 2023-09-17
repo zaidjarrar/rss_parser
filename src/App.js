@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import apiHandler from "./api_handler/api_handler";
 import JobsTable from "./components/JobsTable";
 
-import GoogleMapComponent from "./components/MapComponent";
+import GoogleMapComponent from "./components/GoogleMapComponent";
 
 function App() {
   const [feedItems, setFeedItems] = useState([]);
@@ -55,7 +55,7 @@ function App() {
           <Route
             path="/map"
             element={
-              <GoogleMapComponent countriesList={countriesList} ></GoogleMapComponent>
+              <GoogleMapComponent countriesList={countriesList} rssFeedLoading={loading} ></GoogleMapComponent>
             }
           >
           </Route>

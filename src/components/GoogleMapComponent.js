@@ -3,8 +3,10 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import LoadingSpinner from "./LoadingSpinner";
 import apiHandler from "../api_handler/api_handler";
 import '../styles/map_styles.css'
-export default function GoogleMapComponent({ countriesList }) {
-    const markerIconUrl = "https://cdn-icons-png.flaticon.com/512/15/15918.png?ga=GA1.1.827467152.1681676869";
+export default function GoogleMapComponent({ countriesList, rssFeedLoading }) {
+
+
+    const markerIconUrl = "https://cdn-icons-png.flaticon.com/512/15/15918.png";
 
     const mapStyles = {
         height: "400px",
@@ -20,6 +22,7 @@ export default function GoogleMapComponent({ countriesList }) {
     const [loadingLocation, setLoadingLocation] = useState(false);
     const [availableJobsInLocation, setAvailableJobsInLocation] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState("");
+
     useEffect(() => {
         const fetchCoordinates = async () => {
             setLoadingLocation(true);
@@ -39,7 +42,7 @@ export default function GoogleMapComponent({ countriesList }) {
     const iconSizeMultiplier = (length) => Math.max(length, 75) / 75;
 
 
-    if (loadingLocation) {
+    if (loadingLocation || rssFeedLoading) {
         return (
             <LoadingSpinner loadingMessage="Loading Map, please wait"></LoadingSpinner>
         );
@@ -50,16 +53,19 @@ export default function GoogleMapComponent({ countriesList }) {
             <GoogleMap mapContainerStyle={mapStyles} zoom={4} center={defaultCenter}>
                 {
                     markers.map((marker, index) => {
-                        var jobsList = countriesList[marker.title];
+                        const jobsList = countriesList[marker.title];
+                        const markerPosition = { lat: marker.lat, lng: marker.lng };
+                        const markerTitle = marker.title;
                         return (
 
                             <Marker
                                 key={index}
-                                position={{ lat: marker.lat, lng: marker.lng }}
-                                title={marker.title}
+                                position={markerPosition}
+                                title={markerTitle}
                                 onClick={() => {
                                     setAvailableJobsInLocation(jobsList);
-                                    setSelectedCountry(marker.title);
+                                    setSelectedCountry(markerTitle);
+
                                 }}
                                 icon={{
                                     url: markerIconUrl,
